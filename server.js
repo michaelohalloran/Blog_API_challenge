@@ -31,8 +31,9 @@ function closeServer() {
         server.close(err=>{
             if(err) {
                 reject(err);
-                return
+                return;
             }
+            resolve();
         });
     });
 }

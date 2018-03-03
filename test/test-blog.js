@@ -20,7 +20,7 @@ describe('Blog API', function() {
             .then(function(res) {
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
-                expect(res.body).to.be.a('object');
+                expect(res.body).to.be.a('array');
                 expect(res.body.length).to.be.at.least(1);
                 const expectedKeys = ['id', 'title', 'content', 'author', 'publishDate'];
                 res.body.forEach(function(item) {
@@ -32,7 +32,7 @@ describe('Blog API', function() {
 
     it('should add blog on POST', function() {
         
-        const newPost = {title: 'Random Title', content: 'Dummy content', author: 'Jake'};
+        const newPost = {title: 'Random Title', content: 'Dummy content', author: 'Jake', publishDate: Date.now()};
         return chai.request(app)
             .post('/blog-posts')
             .send(newPost)
@@ -47,19 +47,19 @@ describe('Blog API', function() {
     });
 
     it('should update blogs on PUT', function() {
-        const updateBlogPost = {
-            title: 'Updated post',
-            content: 'Updated content',
-            author: 'Jimmy'
-        }
-
         return chai.request(app)
             .get('/blog-posts')
             .then(function(res) {
-                updateBlogPost.id = res.body[0].id;
+                const updateBlogPost = Object.assign(res.body[0], {
+                    title: 'Updated post',
+                    content: 'Updated content'
+                });
                 return chai.request(app)
-                    .put(`/blog-posts/${updateBlogPost.id}`)
-                    .send(updateBlogPost);
+                    .put(`/blog-posts/${res.body[0].id}`)
+                    .send(updateBlogPost)
+                    .then(function(res) {
+                        expect(res).to.have.status(204);
+                    });
             })
             .then(function(res) {
                 expect(res).to.have.status(200);
