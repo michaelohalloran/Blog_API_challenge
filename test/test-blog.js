@@ -32,7 +32,7 @@ describe('Blog API', function() {
 
     it('should add blog on POST', function() {
         
-        const newPost = {title: 'Random Title', content: 'Dummy content', author: 'Jake', publishDate: Date.now()};
+        const newPost = {title: 'Random Title', content: 'Dummy content', author: 'Jake'};
         const expectedKeys = ['id', 'publishDate'].concat(Object.keys(newPost));
         
         return chai.request(app)
