@@ -33,6 +33,8 @@ describe('Blog API', function() {
     it('should add blog on POST', function() {
         
         const newPost = {title: 'Random Title', content: 'Dummy content', author: 'Jake', publishDate: Date.now()};
+        const expectedKeys = ['id', 'publishDate'].concat(Object.keys(newPost));
+        
         return chai.request(app)
             .post('/blog-posts')
             .send(newPost)
@@ -40,9 +42,10 @@ describe('Blog API', function() {
                 expect(res).to.have.status(201);
                 expect(res).to.be.json;
                 expect(res.body).to.be.a('object');
-                expect(res.body).to.include.keys('title', 'content', 'author');
-                expect(res.body.id).to.not.equal(null);
-                expect(res.body).to.deep.equal(Object.assign(newPost, {id: res.body.id}));
+                expect(res.body).to.have.all.keys(expectedKeys);
+                expect(res.body.title).to.equal(newPost.title);
+                expect(res.body.content).to.equal(newPost.content);
+                expect(res.body.author).to.equal(newPost.author);
             });   
     });
 
@@ -60,12 +63,6 @@ describe('Blog API', function() {
                     .then(function(res) {
                         expect(res).to.have.status(204);
                     });
-            })
-            .then(function(res) {
-                expect(res).to.have.status(200);
-                expect(res).to.be.json;
-                expect(res.body).to.be.a('object');
-                expect(res.body).to.deep.equal(updateBlogPost);
             });
     }); //end IT PUT
 
