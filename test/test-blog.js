@@ -1,9 +1,8 @@
 const chai = require('chai');
-const chaiHTTP = require('chai-http');
-const {app, runServer, closeServer} = require('../server.js');
-
+const chaiHttp = require('chai-http');
 const expect = chai.expect;
-chai.use(chaiHTTP);
+const {app, runServer, closeServer} = require('../server');
+chai.use(chaiHttp);
 
 
 describe('Blog API', function() {

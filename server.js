@@ -3,10 +3,14 @@ const morgan = require('morgan');
 
 const postsRouter = require('./postsRouter');
 const app = express();
+const path = require('path');
 
 app.use(morgan('common'));
 
 app.use('/blog-posts', postsRouter);
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/index.html'))
+});
 
 let server;
 
